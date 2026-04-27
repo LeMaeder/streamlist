@@ -78,3 +78,102 @@ body {
 .stream-form button:hover {
   background-color: #32456b;
 }
+.movie-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 25px;
+}
+
+.movie-item {
+  background-color: #f4f6f8;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.movie-item.completed span {
+  text-decoration: line-through;
+  color: #777;
+}
+
+.movie-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.movie-buttons button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #1f2a44;
+  color: white;
+}
+
+.movie-buttons button:hover {
+  background-color: #32456b;
+}
+.movie-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 25px;
+}
+
+.movie-item {
+  background-color: #f4f6f8;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.movie-item.completed span {
+  text-decoration: line-through;
+  color: #777;
+}
+
+.movie-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.movie-buttons button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #1f2a44;
+  color: white;
+}
+
+.movie-buttons button:hover {
+  background-color: #32456b;
+}
+
+.movie-buttons svg {
+  font-size: 16px;
+}
+
+.filter-buttons {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.filter-buttons button {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #32456b;
+  color: white;
+  cursor: pointer;
+}
+
+.filter-buttons button:hover {
+  background-color: #1f2a44;
+}
