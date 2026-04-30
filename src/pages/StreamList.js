@@ -1,18 +1,23 @@
 import { FaTrash, FaEdit, FaCheck } from 'react-icons/fa';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function StreamList() {
   const [movieName, setMovieName] = useState('');
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(() => {
+    const saved = localStorage.getItem('movies');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [editIndex, setEditIndex] = useState(null);
   const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    localStorage.setItem('movies', JSON.stringify(movies));
+  }, [movies]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (movieName.trim() === '') {
-      return;
-    }
+    if (movieName.trim() === '') return;
 
     if (editIndex !== null) {
       const updatedMovies = [...movies];
@@ -24,17 +29,14 @@ function StreamList() {
         title: movieName,
         completed: false
       };
-
       setMovies([...movies, newMovie]);
     }
 
-    console.log('User entered:', movieName);
     setMovieName('');
   };
 
   const handleDelete = (index) => {
-    const updatedMovies = movies.filter((_, movieIndex) => movieIndex !== index);
-    setMovies(updatedMovies);
+    setMovies(movies.filter((_, i) => i !== index));
   };
 
   const handleComplete = (index) => {
@@ -71,19 +73,16 @@ function StreamList() {
         </button>
       </form>
 
-      {/* FILTER BUTTONS */}
       <div className="filter-buttons">
         <button onClick={() => setFilter('all')}>All</button>
         <button onClick={() => setFilter('active')}>Active</button>
         <button onClick={() => setFilter('completed')}>Completed</button>
       </div>
 
-      {/* COUNTER */}
       <p>
         Total: {movies.length} | Completed: {movies.filter(m => m.completed).length}
       </p>
 
-      {/* EMPTY MESSAGE OR LIST */}
       {movies.length === 0 ? (
         <p>No movies added yet.</p>
       ) : (

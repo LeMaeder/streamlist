@@ -53,6 +53,7 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* FORM */
 .stream-form {
   display: flex;
   flex-direction: column;
@@ -78,20 +79,17 @@ body {
 .stream-form button:hover {
   background-color: #32456b;
 }
+
+/* STREAMLIST ITEMS */
 .movie-list {
-  list-style: none;
-  padding: 0;
   margin-top: 25px;
 }
 
 .movie-item {
-  background-color: #f4f6f8;
+  background-color: #f3f4f6;
   margin-bottom: 12px;
   padding: 12px;
   border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .movie-item.completed span {
@@ -99,47 +97,11 @@ body {
   color: #777;
 }
 
+/* BUTTONS */
 .movie-buttons {
   display: flex;
   gap: 8px;
-}
-
-.movie-buttons button {
-  padding: 6px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #1f2a44;
-  color: white;
-}
-
-.movie-buttons button:hover {
-  background-color: #32456b;
-}
-.movie-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 25px;
-}
-
-.movie-item {
-  background-color: #f4f6f8;
-  margin-bottom: 12px;
-  padding: 12px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.movie-item.completed span {
-  text-decoration: line-through;
-  color: #777;
-}
-
-.movie-buttons {
-  display: flex;
-  gap: 8px;
+  margin-top: 10px;
 }
 
 .movie-buttons button {
@@ -159,6 +121,7 @@ body {
   font-size: 16px;
 }
 
+/* FILTERS */
 .filter-buttons {
   margin-top: 15px;
   display: flex;
@@ -176,4 +139,15 @@ body {
 
 .filter-buttons button:hover {
   background-color: #1f2a44;
+}
+
+/* MOVIES PAGE FIX (THIS IS THE IMPORTANT PART) */
+.movie-item h4 {
+  margin: 0 0 5px 0;
+  text-align: left;
+}
+
+.movie-item p {
+  margin: 0;
+  text-align: left;
 }
