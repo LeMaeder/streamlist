@@ -7,6 +7,7 @@ function StreamList() {
     const saved = localStorage.getItem('movies');
     return saved ? JSON.parse(saved) : [];
   });
+
   const [editIndex, setEditIndex] = useState(null);
   const [filter, setFilter] = useState('all');
 
@@ -17,7 +18,9 @@ function StreamList() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (movieName.trim() === '') return;
+    if (movieName.trim() === '') {
+      return;
+    }
 
     if (editIndex !== null) {
       const updatedMovies = [...movies];
@@ -29,6 +32,7 @@ function StreamList() {
         title: movieName,
         completed: false
       };
+
       setMovies([...movies, newMovie]);
     }
 
@@ -36,7 +40,8 @@ function StreamList() {
   };
 
   const handleDelete = (index) => {
-    setMovies(movies.filter((_, i) => i !== index));
+    const updatedMovies = movies.filter((_, movieIndex) => movieIndex !== index);
+    setMovies(updatedMovies);
   };
 
   const handleComplete = (index) => {
@@ -59,6 +64,7 @@ function StreamList() {
   return (
     <div className="page">
       <h2>My StreamList</h2>
+
       <p>Add movies or shows to your personal streaming list.</p>
 
       <form onSubmit={handleSubmit} className="stream-form">
@@ -68,6 +74,7 @@ function StreamList() {
           value={movieName}
           onChange={(e) => setMovieName(e.target.value)}
         />
+
         <button type="submit">
           {editIndex !== null ? 'Update Item' : 'Add to List'}
         </button>

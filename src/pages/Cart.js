@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import data from '../data.js';
+import data from '../data';
 
 function Cart() {
   const [cart, setCart] = useState(() => {
@@ -16,9 +16,10 @@ function Cart() {
 
   const isSubscription = (item) => item.id <= 4;
 
+  const hasSubscription = cart.some(item => item.id <= 4);
+
   const addToCart = (item) => {
     if (isSubscription(item)) {
-      const hasSubscription = cart.some(i => i.id <= 4);
       if (hasSubscription) {
         setWarning("Only one subscription allowed.");
         return;
@@ -48,6 +49,11 @@ function Cart() {
     ));
   };
 
+  const clearCart = () => {
+    setCart([]);
+    setWarning('');
+  };
+
   const total = cart.reduce((sum, item) => sum + item.price * item.amount, 0);
 
   return (
@@ -61,7 +67,13 @@ function Cart() {
           <h4>{item.service}</h4>
           <p>{item.serviceInfo}</p>
           <p>${item.price}</p>
-          <button onClick={() => addToCart(item)}>Add</button>
+
+          <button
+            onClick={() => addToCart(item)}
+            disabled={isSubscription(item) && hasSubscription}
+          >
+            Add
+          </button>
         </div>
       ))}
 
@@ -85,6 +97,12 @@ function Cart() {
       ))}
 
       <h3>Total: ${total.toFixed(2)}</h3>
+
+      {cart.length > 0 && (
+        <button onClick={clearCart}>
+          Clear Cart
+        </button>
+      )}
     </div>
   );
 }

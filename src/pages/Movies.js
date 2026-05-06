@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 function Movies() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  const [searched, setSearched] = useState(false);
+  const [message, setMessage] = useState('');
 
   const API_KEY = "72346a34a0379ff205356803c6f5eb5d";
 
@@ -17,16 +17,40 @@ function Movies() {
 
       const data = await response.json();
       setResults(data.results || []);
-      setSearched(true);
     } catch (error) {
       console.error("Error fetching movies:", error);
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      searchMovies();
+  const addToList = (movie) => {
+    const savedMovies = JSON.parse(localStorage.getItem('movies')) || [];
+
+    const exists = savedMovies.find(
+      item => item.title === movie.title
+    );
+
+    if (!exists) {
+      const updatedMovies = [
+        ...savedMovies,
+        {
+          title: movie.title,
+          completed: false
+        }
+      ];
+
+      localStorage.setItem('movies', JSON.stringify(updatedMovies));
+
+      setMessage(`${movie.title} added to your StreamList`);
+
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    } else {
+      setMessage(`${movie.title} is already in your StreamList`);
+
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
     }
   };
 
@@ -40,23 +64,30 @@ function Movies() {
           placeholder="Search for a movie..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyPress}
         />
 
         <button onClick={searchMovies}>Search</button>
       </div>
 
+      {message && (
+        <p className="success-message">
+          {message}
+        </p>
+      )}
+
       <div className="movie-list">
-        {searched && results.length === 0 && (
-          <p>No results found.</p>
-        )}
+        {results.length === 0 && <p>No results found</p>}
 
         {results.map((movie) => (
           <div key={movie.id} className="movie-item">
             <div>
               <h4>{movie.title}</h4>
-              <p>{movie.overview || "No description available."}</p>
+              <p>{movie.overview}</p>
             </div>
+
+            <button onClick={() => addToList(movie)}>
+              Add to List
+            </button>
           </div>
         ))}
       </div>
