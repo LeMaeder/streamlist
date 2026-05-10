@@ -81,6 +81,8 @@ function StreamList() {
     );
 
     setMovies(updatedMovies);
+
+    showMessage("Movie status updated.");
   };
 
   const toggleFavorite = (index) => {
@@ -94,6 +96,8 @@ function StreamList() {
     );
 
     setMovies(updatedMovies);
+
+    showMessage("Favorite updated.");
   };
 
   const handleEdit = (index) => {
@@ -144,10 +148,41 @@ function StreamList() {
     const numericRating =
       parseFloat(movie.rating || 0);
 
+    const lowerQuery =
+      searchQuery.toLowerCase();
+
     const titleMatch =
-      movie.title
+      movie.title?.toLowerCase().includes(lowerQuery);
+
+    const genreSearch =
+      Array.isArray(movie.genres)
+        ? movie.genres.some(g =>
+            g.toLowerCase().includes(lowerQuery)
+          )
+        : String(movie.genres || '')
+            .toLowerCase()
+            .includes(lowerQuery);
+
+    const castSearch =
+      String(movie.cast || '')
         .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+        .includes(lowerQuery);
+
+    const yearSearch =
+      String(movie.year || '')
+        .includes(lowerQuery);
+
+    const overviewSearch =
+      String(movie.overview || '')
+        .toLowerCase()
+        .includes(lowerQuery);
+
+    const searchMatch =
+      titleMatch ||
+      genreSearch ||
+      castSearch ||
+      yearSearch ||
+      overviewSearch;
 
     const statusMatch =
       statusFilter === 'all' ||
@@ -174,7 +209,7 @@ function StreamList() {
       getGenresArray(movie.genres).includes(genreFilter);
 
     return (
-      titleMatch &&
+      searchMatch &&
       statusMatch &&
       viewerRatingMatch &&
       movieRatingMatch &&
@@ -329,7 +364,7 @@ function StreamList() {
 
         <input
           type="text"
-          placeholder="Search your watchlist..."
+          placeholder="Search by title, cast, genre, year..."
           value={searchQuery}
           onChange={(e) =>
             setSearchQuery(e.target.value)
@@ -657,4 +692,3 @@ function StreamList() {
 }
 
 export default StreamList;
-

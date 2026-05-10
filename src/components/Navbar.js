@@ -5,7 +5,7 @@ import {
   NavLink
 } from 'react-router-dom';
 
-function Navbar() {
+function Navbar({ onLogout }) {
 
   return (
 
@@ -20,41 +20,28 @@ function Navbar() {
 
       <div className="nav-links">
 
-        <NavLink
-          to="/watchlist"
-          className={({ isActive }) =>
-            isActive ? 'active-link' : ''
-          }
-        >
+        <NavLink to="/watchlist">
           Watchlist
         </NavLink>
 
-        <NavLink
-          to="/movies"
-          className={({ isActive }) =>
-            isActive ? 'active-link' : ''
-          }
-        >
+        <NavLink to="/movies">
           Discover Movies
         </NavLink>
 
-        <NavLink
-          to="/cart"
-          className={({ isActive }) =>
-            isActive ? 'active-link' : ''
-          }
-        >
+        <NavLink to="/cart">
           Cart
         </NavLink>
 
-        <NavLink
-          to="/about"
-          className={({ isActive }) =>
-            isActive ? 'active-link' : ''
-          }
-        >
+        <NavLink to="/about">
           About
         </NavLink>
+
+        <button
+          className="logout-button"
+          onClick={onLogout}
+        >
+          Logout
+        </button>
 
       </div>
 

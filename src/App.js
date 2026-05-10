@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   BrowserRouter as Router,
   Routes,
-  Route
+  Route,
+  Navigate
 } from 'react-router-dom';
 
 import './App.css';
@@ -14,30 +15,127 @@ import Movies from './pages/Movies';
 import StreamList from './pages/StreamList';
 import Cart from './pages/Cart';
 import About from './pages/About';
+import Login from './pages/Login';
+import Checkout from './pages/Checkout';
+
+function ProtectedRoute({ children, loggedIn }) {
+
+  if (!loggedIn) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+}
 
 function App() {
+
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+
+    const savedLogin =
+      localStorage.getItem('loggedIn') === 'true';
+
+    setLoggedIn(savedLogin);
+
+  }, []);
+
+  const handleLogin = () => {
+
+    localStorage.setItem(
+      'loggedIn',
+      'true'
+    );
+
+    setLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+
+    localStorage.removeItem('loggedIn');
+
+    setLoggedIn(false);
+  };
+
   return (
+
     <Router>
+
       <div className="App">
-        <Navbar />
+
+        {loggedIn && (
+          <Navbar onLogout={handleLogout} />
+        )}
 
         <Routes>
-          {/* Default Landing Page */}
-          <Route path="/" element={<Movies />} />
 
-          {/* Discover Movies */}
-          <Route path="/movies" element={<Movies />} />
+          <Route
+            path="/login"
+            element={
+              loggedIn
+                ? <Navigate to="/movies" />
+                : <Login onLogin={handleLogin} />
+            }
+          />
 
-          {/* Watchlist */}
-          <Route path="/watchlist" element={<StreamList />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <Movies />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Cart */}
-          <Route path="/cart" element={<Cart />} />
+          <Route
+            path="/movies"
+            element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <Movies />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* About */}
-          <Route path="/about" element={<About />} />
+          <Route
+            path="/watchlist"
+            element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <StreamList />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <Cart />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <About />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
+
       </div>
+
     </Router>
   );
 }

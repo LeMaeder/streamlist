@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import data from '../data.js';
 
 function Cart() {
 
+  const navigate = useNavigate();
+
   const [cart, setCart] = useState(() => {
 
-    const saved = localStorage.getItem('cart');
+    const saved =
+      localStorage.getItem('cart');
 
     return saved
       ? JSON.parse(saved)
       : [];
-
   });
 
   const [warning, setWarning] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
 
@@ -25,10 +30,6 @@ function Cart() {
 
   }, [cart]);
 
-  const isSubscription = (item) => {
-    return item.id <= 4;
-  };
-
   const showWarning = (text) => {
 
     setWarning(text);
@@ -36,47 +37,62 @@ function Cart() {
     setTimeout(() => {
       setWarning('');
     }, 3000);
-
   };
+
+  const showSuccess = (text) => {
+
+    setSuccessMessage(text);
+
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+  };
+
+  const isSubscription = (item) =>
+    item.id <= 4;
 
   const addToCart = (item) => {
 
     if (isSubscription(item)) {
 
       const hasSubscription = cart.some(
-        cartItem => cartItem.id <= 4
+        i => i.id <= 4
       );
 
       if (hasSubscription) {
 
         showWarning(
-          "Only one subscription plan can be added."
+          'Only one subscription allowed.'
         );
 
         return;
       }
     }
 
-    const existingItem = cart.find(
-      cartItem => cartItem.id === item.id
+    const exists = cart.find(
+      i => i.id === item.id
     );
 
-    if (existingItem && !isSubscription(item)) {
+    if (exists && !isSubscription(item)) {
 
-      const updatedCart = cart.map(cartItem =>
-
-        cartItem.id === item.id
-          ? {
-              ...cartItem,
-              amount: cartItem.amount + 1
-            }
-          : cartItem
-
+      setCart(
+        cart.map(i =>
+          i.id === item.id
+            ? {
+                ...i,
+                amount: i.amount + 1
+              }
+            : i
+        )
       );
 
-      setCart(updatedCart);
+      showSuccess(
+        `${item.service} quantity updated.`
+      );
 
-    } else if (!existingItem) {
+    }
+
+    else if (!exists) {
 
       setCart([
         ...cart,
@@ -85,49 +101,55 @@ function Cart() {
           amount: 1
         }
       ]);
-    }
 
-    setWarning('');
+      showSuccess(
+        `${item.service} added to cart.`
+      );
+    }
   };
 
   const removeItem = (id) => {
 
-    const updatedCart = cart.filter(
-      item => item.id !== id
+    setCart(
+      cart.filter(item =>
+        item.id !== id
+      )
     );
 
-    setCart(updatedCart);
+    showWarning('Item removed from cart.');
   };
 
   const changeQuantity = (id, amount) => {
 
-    const updatedCart = cart.map(item =>
-
-      item.id === id
-        ? {
-            ...item,
-            amount: Math.max(1, amount)
-          }
-        : item
-
+    setCart(
+      cart.map(item =>
+        item.id === id
+          ? {
+              ...item,
+              amount: Math.max(1, amount)
+            }
+          : item
+      )
     );
-
-    setCart(updatedCart);
   };
 
   const clearCart = () => {
+
     setCart([]);
+
+    showWarning('Cart cleared.');
   };
 
   const total = cart.reduce(
-
-    (sum, item) => {
-      return sum + (item.price * item.amount);
-    },
-
+    (sum, item) =>
+      sum + item.price * item.amount,
     0
-
   );
+
+  const handleCheckout = () => {
+
+    navigate('/checkout');
+  };
 
   return (
 
@@ -135,7 +157,7 @@ function Cart() {
 
       <div className="cart-layout">
 
-        {/* LEFT SIDE */}
+        {/* PRODUCTS */}
 
         <section className="cart-products">
 
@@ -151,55 +173,86 @@ function Cart() {
 
           )}
 
+          {successMessage && (
+
+            <p className="success-message">
+              {successMessage}
+            </p>
+
+          )}
+
           <div className="product-grid">
 
-            {data.map(item => (
+            {data.map(item => {
 
-              <div
-                key={item.id}
-                className="product-card"
-              >
+              const subscriptionLocked =
 
-                <img
-                  src={item.img}
-                  alt={item.service}
-                />
+                isSubscription(item) &&
 
-                <h3>
-                  {item.service}
-                </h3>
+                cart.some(
+                  i =>
+                    i.id <= 4 &&
+                    i.id !== item.id
+                );
 
-                <p>
-                  {item.serviceInfo}
-                </p>
+              return (
 
-                <strong>
-                  ${item.price}
-                </strong>
-
-                <button
-                  onClick={() =>
-                    addToCart(item)
-                  }
+                <div
+                  key={item.id}
+                  className="product-card"
                 >
-                  Add to Cart
-                </button>
 
-              </div>
+                  <img
+                    src={item.img}
+                    alt={item.service}
+                  />
 
-            ))}
+                  <h3>
+                    {item.service}
+                  </h3>
+
+                  <p>
+                    {item.serviceInfo}
+                  </p>
+
+                  <strong>
+                    ${item.price}
+                  </strong>
+
+                  <button
+                    className={
+                      subscriptionLocked
+                        ? 'disabled-subscription-button'
+                        : ''
+                    }
+                    disabled={subscriptionLocked}
+                    onClick={() =>
+                      addToCart(item)
+                    }
+                  >
+
+                    {
+                      subscriptionLocked
+                        ? 'Subscription Selected'
+                        : 'Add to Cart'
+                    }
+
+                  </button>
+
+                </div>
+
+              );
+            })}
 
           </div>
 
         </section>
 
-        {/* RIGHT SIDE */}
+        {/* CART */}
 
         <aside className="cart-sidebar">
 
-          <h2>
-            Your Cart
-          </h2>
+          <h2>Your Cart</h2>
 
           {cart.length === 0 ? (
 
@@ -285,6 +338,13 @@ function Cart() {
                   onClick={clearCart}
                 >
                   Clear Cart
+                </button>
+
+                <button
+                  className="checkout-button"
+                  onClick={handleCheckout}
+                >
+                  Proceed to Checkout
                 </button>
 
               </div>
