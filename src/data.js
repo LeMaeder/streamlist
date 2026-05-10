@@ -1,36 +1,42 @@
+// src/data.js
+
 const list = [
   {
     id: 1,
     service: "Basic Subscription",
     serviceInfo: "For one User",
     price: 4.99,
-    img: "https://creazilla-store.fra1.digitaloceanspaces.com/icons/3231802/ticket-icon-md.png",
+    img: "https://cdn-icons-png.flaticon.com/512/1048/1048941.png",
     amount: 1,
   },
+
   {
     id: 2,
     service: "Gold Subscription",
     serviceInfo: "Share with Family",
     price: 9.99,
-    img: "https://creazilla-store.fra1.digitaloceanspaces.com/icons/3237088/ticket-icon-md.png",
+    img: "https://cdn-icons-png.flaticon.com/512/3125/3125713.png",
     amount: 1,
   },
+
   {
     id: 3,
     service: "Premium Subscription",
     serviceInfo: "Share with the World",
     price: 12.99,
-    img: "https://creazilla-store.fra1.digitaloceanspaces.com/icons/3258730/ticket-icon-md.png",
+    img: "https://cdn-icons-png.flaticon.com/512/833/833472.png",
     amount: 1,
   },
+
   {
     id: 4,
     service: "Social Media Sharing Subscription",
     serviceInfo: "Share your list",
     price: 2.99,
-    img: "https://cdn.creazilla.com/photos/3730387/social-media-1908766_1280-photo-md.jpeg",
+    img: "https://cdn-icons-png.flaticon.com/512/733/733547.png",
     amount: 1,
   },
+
   {
     id: 5,
     service: "EZ Tech T-Shirt",
@@ -39,6 +45,7 @@ const list = [
     img: "https://cdn.creazilla.com/cliparts/5548105/tie-dye-t-shirt-clipart-md.png",
     amount: 2000,
   },
+
   {
     id: 6,
     service: "EZ Techplosion",
@@ -47,6 +54,7 @@ const list = [
     img: "https://cdn.creazilla.com/cliparts/7487471/tie-dye-t-shirt-clipart-md.png",
     amount: 1400,
   },
+
   {
     id: 7,
     service: "EZ Techmerizing",
@@ -55,6 +63,7 @@ const list = [
     img: "https://cdn.creazilla.com/cliparts/5632313/tie-dye-t-shirt-clipart-sm.png",
     amount: 1090,
   },
+
   {
     id: 8,
     service: "EZ Tech Case",
